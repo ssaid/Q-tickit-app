@@ -13,6 +13,7 @@ class Ticket(Base):
     customer_email = Column(String(255), nullable=False)
     customer_adress = Column(String(255), nullable=False)
     customer_phone = Column(String(255), nullable=True)
+    #relationships
     link_id = Column(Integer, ForeignKey("link.id"))
     link = relationship("Link", back_populates="tickets")
     state_id = Column(Integer, ForeignKey("state.id"))

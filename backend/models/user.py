@@ -13,4 +13,5 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
+    #relationships
     organization_users = relationship("OrganizationUser", back_populates="user")

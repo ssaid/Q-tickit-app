@@ -11,5 +11,6 @@ class Organization(Base):
     name = Column(String(255), nullable=False)
     city = Column(String(255), nullable=False)
     adress = Column(String(255), nullable=False)
+    #relationships
     events = relationship("Event", back_populates="organization")
     organization_users = relationship("OrganizationUser", back_populates="organization")

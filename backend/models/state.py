@@ -9,4 +9,5 @@ class State(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     description = Column(String(255), nullable=False)
-    tickets = relationship("Tickets", back_populates="state")
+    #relationships
+    tickets = relationship("Ticket", back_populates="state")

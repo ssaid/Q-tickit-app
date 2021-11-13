@@ -10,5 +10,6 @@ class Event(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(255), nullable=False)
     description = Column(String(500), nullable=False)
-    organization_id = Column(Integer, ForeignKey("organizations.id"))
+    #relationship
+    organization_id = Column(Integer, ForeignKey("organization.id"))
     organization = relationship("Organization", back_populates="events")

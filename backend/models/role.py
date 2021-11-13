@@ -9,4 +9,5 @@ class Role(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     description = Column(String(255), nullable=False)
+    #relationships
     organization_users = relationship("OrganizationUser", back_populates="role")

@@ -1,7 +1,8 @@
 from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 
-from ..config import Base
+from config.db import Base
+from . import organization
 
 
 class Event(Base):

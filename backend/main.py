@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 #own imports
 from config.db import engine, SessionLocal
-from models.models import all_modules
+from models import all_modules
 
 
 

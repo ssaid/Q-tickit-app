@@ -8,7 +8,7 @@ from . import ticket
 from . import user
 
 
-__all__ = [
+all_modules = [
     event,
     link,
     organization_user,

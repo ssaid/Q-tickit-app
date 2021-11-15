@@ -4,10 +4,11 @@ from sqlalchemy.orm import Session
 
 #own imports
 from config.db import engine, SessionLocal
-import models
+from models.models import all_modules
 
 
-for model in models.__all__:
+
+for model in all_modules:
     model.Base.metadata.create_all(bind=engine)
 
 

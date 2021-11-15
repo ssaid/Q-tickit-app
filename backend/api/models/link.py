@@ -2,7 +2,7 @@ from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import Float
 
-from config.db import Base
+from ..config.database import Base
 
 
 class Link(Base):

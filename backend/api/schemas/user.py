@@ -2,16 +2,19 @@ from pydantic import BaseModel
 from typing import Optional
 
 
-class User(BaseModel):
+class UserBase(BaseModel):
+    email: str
     login: str
     name: str
+    email: str
+    commission: Optional[float] = 5.0
+    is_active: Optional[bool]
+
+    class Config:
+        orm_mode = True
+
+class UserCreate(UserBase):
     password: str
-    commission: float
-    email: str
-    is_active: Optional[bool] = True
 
-
-class ShowUser(BaseModel):
-    login: str
-    name: str
-    email: str
+class User(UserBase):
+    id: int

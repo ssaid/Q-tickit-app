@@ -14,3 +14,4 @@ class Event(Base):
     #relationship
     organization_id = Column(Integer, ForeignKey("organization.id"))
     organization = relationship("Organization", back_populates="events")
+    links = relationship("Link", back_populates="event")

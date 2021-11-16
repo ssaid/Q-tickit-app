@@ -10,7 +10,7 @@ class OrganizationUser(Base):
     id = Column(Integer, primary_key=True, index=True)
     #relationships
     organization_id = Column(Integer, ForeignKey("organization.id"))
-    organizations = relationship("Organization", back_populates="organization_users")
+    organization = relationship("Organization", back_populates="organization_users")
     user_id = Column(Integer, ForeignKey("user.id"))
     user = relationship("User", back_populates="organization_users")
     role_id = Column(Integer, ForeignKey("role.id"))

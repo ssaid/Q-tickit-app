@@ -13,6 +13,6 @@ class Link(Base):
     tickets_sold = Column(Integer)
     ticket_price = Column(Float)
     #relationships
-    tickets = relationship("Ticket", back_populates="links")
+    tickets = relationship("Ticket", back_populates="link")
     event_id = Column(Integer, ForeignKey("event.id"))
-    event = relationship("Events", back_populates="links")
+    event = relationship("Event", back_populates="links")

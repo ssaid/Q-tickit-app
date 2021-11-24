@@ -1,7 +1,5 @@
-from fastapi.param_functions import Depends
-from sqlalchemy.orm import Session
-# from api.config.database import get_db
+from databases import Database
 
-# class BaseRepository:
-#     def __init__(self, db: Session = Depends(get_db)) -> None:
-#         self.db = db
+class BaseRepository:
+    def __init__(self, db: Database) -> None:
+        self.db = db

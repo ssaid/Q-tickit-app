@@ -17,7 +17,10 @@ def create_event_table() -> None:
         sa.Column('is_active', sa.Boolean, nullable=False),
         sa.Column('created_at', sa.DateTime, nullable=False),
         sa.Column('updated_at', sa.DateTime, nullable=False),
-        sa.Column('created_by', sa.Integer, ForeignKey('user.id'), nullable=False),
-        sa.Column('updated_by', sa.Integer, ForeignKey('user.id'), nullable=False),
-        sa.Column('organization_id', sa.Integer, ForeignKey('organization.id'), nullable=False)
+        sa.Column('created_by', sa.Integer,
+                  ForeignKey('client.id'), nullable=False),
+        sa.Column('updated_by', sa.Integer,
+                  ForeignKey('client.id'), nullable=False),
+        sa.Column('organization_id', sa.Integer, ForeignKey(
+            'organization.id'), nullable=False)
     )

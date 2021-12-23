@@ -5,9 +5,9 @@ from alembic import op
 import sqlalchemy as sa
 
 
-def create_user_table() -> None:
+def create_client_table() -> None:
     op.create_table(
-        'user',
+        'client',
         sa.Column('id', sa.Integer, primary_key=True, index=True),
         sa.Column('login', sa.String, unique=True, index=True),
         sa.Column('name', sa.String),

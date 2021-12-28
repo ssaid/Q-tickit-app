@@ -3,7 +3,7 @@ from typing import Optional
 from .core import CoreModel, IDModelMixin
 
 
-class UserBase(CoreModel):
+class ClientBase(CoreModel):
     login: str
     name: str
     email: str
@@ -13,9 +13,9 @@ class UserBase(CoreModel):
     class Config:
         orm_mode = True
 
-class UserCreate(UserBase):
+class ClientCreate(ClientBase):
     password: str
 
 
-class UserInDB(IDModelMixin, UserBase):
+class ClientInDB(IDModelMixin, ClientBase):
     pass

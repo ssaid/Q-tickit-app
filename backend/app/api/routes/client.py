@@ -6,7 +6,7 @@ from typing import List
 from ..repositories.client import ClientRepository
 from ..dependencies.database import get_database, get_repository
 
-from ..schemas.client import ClientCreate, ClientBase, ClientInDB
+from ..schemas.client import *
 
 
 router = APIRouter()
@@ -41,3 +41,50 @@ async def create_client(
     print(new_client)
     client = await client_repo.create_client(new_client=new_client)
     return client
+
+@router.delete("/{id}")
+async def delete_client(
+    id: int,
+    client_repo: ClientRepository = Depends(get_repository(ClientRepository))
+    ):
+    res = await client_repo.delete_client(id)
+    if not res:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Client not found")
+                          
+    return res
+
+@router.put("/{id}/commission", response_model=ClientInDB)
+async def update_client_commission(
+    id: int,
+    commission: CommissionUpdate,
+    client_repo: ClientRepository = Depends(get_repository(ClientRepository))
+    ):
+    client = await client_repo.update_client_commission(id, commission.commission)
+    if not client:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Client not found")
+                          
+    return client
+
+@router.put("/{id}/status", response_model=ClientInDB)
+async def update_client_status(
+    id: int,
+    is_active: StatusUpdate,
+    client_repo: ClientRepository = Depends(get_repository(ClientRepository))
+    ):
+    client = await client_repo.update_client_status(id, is_active.is_active)
+    if not client:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Client not found")
+                          
+    return client
+
+@router.put("/{id}")
+async def update_client_password(
+    id: int,
+    new_password: PasswordUpdate,
+    client_repo: ClientRepository = Depends(get_repository(ClientRepository))
+    ):
+    res = await client_repo.update_client_password(id, new_password.password)
+    if not res:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Client not found")
+                          
+    return res

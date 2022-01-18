@@ -16,6 +16,14 @@ class ClientBase(CoreModel):
 class ClientCreate(ClientBase):
     password: str
 
+class PasswordUpdate(BaseModel):
+    password: str
+
+class CommissionUpdate(BaseModel):
+    commission: float
+
+class StatusUpdate(BaseModel):
+    is_active: bool
 
 class ClientInDB(IDModelMixin, ClientBase):
     pass

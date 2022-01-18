@@ -42,7 +42,7 @@ async def create_client(
     client = await client_repo.create_client(new_client=new_client)
     return client
 
-@router.delete("/{id}")
+@router.delete("/{id}", responses={204: {'response': 'client deleted', 'id': id}})
 async def delete_client(
     id: int,
     client_repo: ClientRepository = Depends(get_repository(ClientRepository))
@@ -80,10 +80,10 @@ async def update_client_status(
 @router.put("/{id}")
 async def update_client_password(
     id: int,
-    new_password: PasswordUpdate,
+    request: PasswordUpdate,
     client_repo: ClientRepository = Depends(get_repository(ClientRepository))
     ):
-    res = await client_repo.update_client_password(id, new_password.password)
+    res = await client_repo.update_client_password(id, request.old_password, request.new_password)
     if not res:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Client not found")
                           

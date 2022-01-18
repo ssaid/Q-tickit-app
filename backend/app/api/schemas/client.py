@@ -17,7 +17,8 @@ class ClientCreate(ClientBase):
     password: str
 
 class PasswordUpdate(BaseModel):
-    password: str
+    new_password: str
+    old_password: str
 
 class CommissionUpdate(BaseModel):
     commission: float

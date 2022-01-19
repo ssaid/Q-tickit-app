@@ -10,12 +10,6 @@ from .base import BaseRepository
 from ..schemas.client import ClientCreate, ClientBase, ClientInDB
 
 
-
-
-
-
-
-
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def get_password_hash(password):

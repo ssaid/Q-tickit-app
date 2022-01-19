@@ -8,7 +8,6 @@ from ..dependencies.database import get_database, get_repository
 
 from ..schemas.client import *
 
-
 router = APIRouter()
 
 
@@ -19,7 +18,7 @@ async def get_clients(
     clients = await client_repo.get_clients()
     if not clients:
         raise HTTPException(status_code=404, detail="Clients not found")
-                          
+
     return clients
 
 @router.get("/{id}", response_model=ClientInDB)
@@ -30,7 +29,7 @@ async def get_client(
     client = await client_repo.get_client(id)
     if not client:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Client not found")
-                          
+
     return client
 
 @router.post("/", response_model=ClientInDB, status_code=status.HTTP_201_CREATED)
@@ -50,7 +49,7 @@ async def delete_client(
     res = await client_repo.delete_client(id)
     if not res:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Client not found")
-                          
+
     return res
 
 @router.put("/{id}/commission", response_model=ClientInDB)
@@ -62,7 +61,7 @@ async def update_client_commission(
     client = await client_repo.update_client_commission(id, commission.commission)
     if not client:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Client not found")
-                          
+
     return client
 
 @router.put("/{id}/status", response_model=ClientInDB)
@@ -74,7 +73,7 @@ async def update_client_status(
     client = await client_repo.update_client_status(id, is_active.is_active)
     if not client:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Client not found")
-                          
+
     return client
 
 @router.put("/{id}")
@@ -86,5 +85,5 @@ async def update_client_password(
     res = await client_repo.update_client_password(id, request.old_password, request.new_password)
     if not res:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Client not found")
-                          
+
     return res

@@ -1,18 +1,14 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Float
-from sqlalchemy.orm import relationship
-
-from alembic import op
-import sqlalchemy as sa
+from typing import Optional
+from sqlmodel import SQLModel, Field
 
 
-def create_client_table() -> None:
-    op.create_table(
-        'client',
-        sa.Column('id', sa.Integer, primary_key=True, index=True),
-        sa.Column('login', sa.String, unique=True, index=True),
-        sa.Column('name', sa.String),
-        sa.Column('email', sa.String, unique=True, index=True),
-        sa.Column('password', sa.String),
-        sa.Column('commission', sa.Float),
-        sa.Column('is_active', sa.Boolean, default=True),
-    )
+
+class Client(SQLModel, table=True):
+    id: Optional[int] = Field(default=None, primary_key=True)
+    name: str
+    login: str
+    email: str
+    password: str
+    commission: float
+    is_active: bool
+

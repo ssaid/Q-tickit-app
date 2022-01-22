@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from databases import Database
+from sqlmodel import SQLModel, create_engine, Session
 from app.core.config import DATABASE_URL
 import logging
 
@@ -7,10 +7,10 @@ logger = logging.getLogger(__name__)
 
 
 async def connect_to_db(app: FastAPI) -> None:
-    database = Database(DATABASE_URL, min_size=2, max_size=10)  # these can be configured in config as well
+    engine = create_engine(DATABASE_URL, echo=True)  # these can be configured in config as well
 
     try:
-        await database.connect()
+        database = Session(engine)
         app.state._db = database
     except Exception as e:
         logger.warn("--- DB CONNECTION ERROR ---")
@@ -20,7 +20,7 @@ async def connect_to_db(app: FastAPI) -> None:
 
 async def close_db_connection(app: FastAPI) -> None:
     try:
-        await app.state._db.disconnect()
+        await app.state._db.close()
     except Exception as e:
         logger.warn("--- DB DISCONNECT ERROR ---")
         logger.warn(e)

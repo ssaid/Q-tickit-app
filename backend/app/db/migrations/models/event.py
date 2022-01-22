@@ -1,26 +1,22 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship
-
-from alembic import op
-import sqlalchemy as sa
+from typing import Optional
+from sqlmodel import SQLModel, Field
 
 
-def create_event_table() -> None:
+class Event(SQLModel, table=True)
 
-    op.create_table(
-        'event',
-        sa.Column('id', sa.Integer, primary_key=True),
-        sa.Column('name', sa.String(length=255), nullable=False),
-        sa.Column('description', sa.String(length=255), nullable=False),
-        sa.Column('start_date', sa.DateTime, nullable=False),
-        sa.Column('end_date', sa.DateTime, nullable=False),
-        sa.Column('is_active', sa.Boolean, nullable=False),
-        sa.Column('created_at', sa.DateTime, nullable=False),
-        sa.Column('updated_at', sa.DateTime, nullable=False),
-        sa.Column('created_by', sa.Integer,
-                  ForeignKey('client.id'), nullable=False),
-        sa.Column('updated_by', sa.Integer,
-                  ForeignKey('client.id'), nullable=False),
-        sa.Column('organization_id', sa.Integer, ForeignKey(
-            'organization.id'), nullable=False)
-    )
+    id: Optional[int] = Field(default=None, primary_key=True)
+    name: str
+    description: str
+    start_date: str     # TODO: Change to datetime
+    end_date: str       # TODO: Change to datetime
+    is_active: bool
+    created_at: str     # TODO: Change to datetime
+    updated_at: str     # TODO: Change to datetime
+
+    #Relationships
+
+    created_by: int     # foreign key a user
+    updated_by: int     # foreign key a user
+    organization_id: int        # foreign key a organization
+
+

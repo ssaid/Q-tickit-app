@@ -41,12 +41,11 @@ class ClientRepository(BaseRepository):
             FROM client c
             LEFT JOIN organization_client oc ON c.id = oc.client_id
             LEFT JOIN organization o ON oc.organization_id = o.id
-            LEFT JOIN role r ON r.id = oc.role_id
+            LEFT JOIN role r ON r.id = oc.role_id;
         """
 
         clients = await self.db.fetch_all(query=SELECT_ALL_USERS_QUERY)
-
-        print([{**client} for client in clients])
+        print(clients)
         if not clients:
             raise HTTPException(status_code=404, detail="Client not found")
         return [{**client} for client in clients]

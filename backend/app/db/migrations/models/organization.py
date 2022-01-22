@@ -8,5 +8,10 @@ def create_organization_table() -> None:
         sa.Column('name', sa.String(255), nullable=False),
         sa.Column('city', sa.String(255), nullable=False),
         sa.Column('state', sa.String(255), nullable=False),
-        sa.Column('adress', sa.String(255), nullable=False),
+        sa.Column('address', sa.String(255), nullable=False),
+        sa.Column('phone', sa.String(255), nullable=False),
+        sa.Column('email', sa.String(255), nullable=False),
+        sa.Column('logo', sa.Binary, nullable=False),
+        sa.Column('is_active', sa.Boolean, nullable=False),
+        sa.Column('website', sa.String(255), nullable=False),
     )

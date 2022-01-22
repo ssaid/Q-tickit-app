@@ -1,6 +1,7 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 from .core import CoreModel, IDModelMixin
+from .organization import ClientOnOrganization
 
 
 class ClientBase(CoreModel):
@@ -9,6 +10,7 @@ class ClientBase(CoreModel):
     email: str
     commission: Optional[float] = 5.0
     is_active: Optional[bool] = True
+    organizations: List[ClientOnOrganization] = []
 
     class Config:
         orm_mode = True

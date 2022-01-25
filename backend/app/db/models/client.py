@@ -1,5 +1,6 @@
-from typing import Optional
-from sqlmodel import SQLModel, Field
+from typing import Optional, List, TYPE_CHECKING
+from sqlmodel import SQLModel, Field, Relationship
+from . import event
 
 
 
@@ -11,4 +12,15 @@ class Client(SQLModel, table=True):
     password: str
     commission: float
     is_active: bool
+
+    # Relationships
+    if TYPE_CHECKING:
+        from .event import Event
+        from .organization_client_link import OrganizationClientLink
+
+    events: List['Event'] = Relationship(back_populates='client')
+
+    #m2m
+    organizations: List['OrganizationClientLink'] = Relationship(back_populates='clients')
+
 

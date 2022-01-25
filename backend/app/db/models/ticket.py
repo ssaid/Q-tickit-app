@@ -1,5 +1,5 @@
-from typing import Optional
-from sqlmodel import SQLModel, Field
+from typing import Optional, TYPE_CHECKING
+from sqlmodel import SQLModel, Field, Relationship
 
 class Ticket(SQLModel, table=True):
 
@@ -12,6 +12,13 @@ class Ticket(SQLModel, table=True):
 
 
     #Relationships
+    if TYPE_CHECKING:
+        from .link import Link
+        from .state import State
 
-    #link_id: int
-    #state_id: int
+    link_id: int = Field(default=None, foreign_key='link.id')
+    link: 'Link' = Relationship(back_populates='tickets')
+
+
+    state_id: int = Field(default=None, foreign_key='state.id')
+    state: 'State' = Relationship(back_populates='tickets')

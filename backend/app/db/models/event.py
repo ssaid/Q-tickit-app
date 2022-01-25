@@ -1,5 +1,6 @@
-from typing import Optional
-from sqlmodel import SQLModel, Field
+from typing import Optional, TYPE_CHECKING, List
+from sqlmodel import SQLModel, Field, Relationship
+from . import client
 
 
 class Event(SQLModel, table=True):
@@ -11,12 +12,21 @@ class Event(SQLModel, table=True):
     end_date: str       # TODO: Change to datetime
     is_active: bool
     created_at: str     # TODO: Change to datetime
-    updated_at: str     # TODO: Change to datetime
 
     #Relationships
+    if TYPE_CHECKING:
+        from .client import Client
+        from .link import Link
+        from .organization import Organization
 
-    created_by: int     # foreign key a user
-    updated_by: int     # foreign key a user
-    organization_id: int        # foreign key a organization
+    #m2o
+    client_id: int = Field(default=None, foreign_key='client.id')
+    client: 'Client' = Relationship(back_populates='events')
+
+    organization_id: int = Field(default=None, foreign_key='organization.id')
+    organization: 'Organization' = Relationship(back_populates='events')
+
+    #o2m
+    links: List['Link'] = Relationship(back_populates='event')
 
 

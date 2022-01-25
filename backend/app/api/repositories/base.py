@@ -1,5 +1,5 @@
-from databases import Database
+from sqlalchemy.ext.asyncio import AsyncSession
 
 class BaseRepository:
-    def __init__(self, db: Database) -> None:
+    def __init__(self, db: AsyncSession) -> None:
         self.db = db

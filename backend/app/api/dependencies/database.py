@@ -1,14 +1,11 @@
 from typing import Callable, Type
-from databases import Database
 from fastapi import Depends
 from starlette.requests import Request
-from app.api.repositories.base import BaseRepository
+from ..repositories.base import BaseRepository
+from ...db.db import get_session, AsyncSession
 
-
-def get_database(request: Request) -> Database:
-    return request.app.state._db
 
 def get_repository(Repo_type: Type[BaseRepository]) -> Callable:
-    def get_repo(db: Database = Depends(get_database)) -> Type[BaseRepository]:
+    def get_repo(db: AsyncSession = Depends(get_session)) -> Type[BaseRepository]:
         return Repo_type(db)
     return get_repo

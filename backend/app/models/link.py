@@ -1,8 +1,9 @@
 from typing import Optional, TYPE_CHECKING, List
 from sqlmodel import SQLModel, Field, Relationship
 
-class Link(SQLModel):
-    id: int
+class Link(SQLModel, table=True):
+
+    id: Optional[int] = Field(default=None, primary_key=True)
     max_tickets: int
     tickets_sold: int
     ticket_price: float

@@ -9,7 +9,8 @@ ENV PYTHONBUFFERED 1
 RUN apt-get update \
   && apt-get -y install netcat libpq-dev gcc postgresql \
   && apt-get clean \
-  && pip install psycopg2
+  && pip install psycopg2 \
+  && pip install asyncpg
 
 # install python dependencies
 RUN pip install --upgrade pip

@@ -21,14 +21,10 @@ class ClientRepository(BaseRepository):
 
     async def create_client(self, *, new_client:ClientCreate) -> ClientInDB:
 
-        CREATE_USER_QUERY = """
-            INSERT INTO client (login, name, email, commission, is_active, password)
-            VALUES (:login, :name, :email, :commission, :is_active, :password)
-            RETURNING id, login, name, email, commission, is_active;
-        """
         new_client.password = get_password_hash(new_client.password)
         query_values = new_client.dict()
-        client = await self.db.fetch_one(query=CREATE_USER_QUERY, values=query_values)
+        client = await self.db.add(table='client', values=query_values)
+        self.db.commit()
 
         return ClientInDB(**client)
 

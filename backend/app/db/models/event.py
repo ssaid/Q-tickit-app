@@ -1,6 +1,6 @@
 from typing import Optional, TYPE_CHECKING, List
-from sqlmodel import SQLModel, Field, Relationship
-from . import client
+from sqlmodel import SQLModel, Field, Relationship, Column, DateTime
+from datetime import datetime
 
 
 class Event(SQLModel, table=True):
@@ -8,10 +8,10 @@ class Event(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     name: str
     description: str
-    start_date: str     # TODO: Change to datetime
-    end_date: str       # TODO: Change to datetime
+    start_date: datetime = Field(sa_column=Column(DateTime(timezone=True)))
+    end_date: datetime = Field(sa_column=Column(DateTime(timezone=True)))
     is_active: bool
-    created_at: str     # TODO: Change to datetime
+    created_at: datetime = Field(sa_column=Column(DateTime(timezone=True)))
 
     #Relationships
     if TYPE_CHECKING:

@@ -9,4 +9,4 @@ class State(SQLModel, table=True):
     if TYPE_CHECKING:
         from .ticket import Ticket
 
-    tickets: List['Ticket'] = Relationship(back_populates='link')
+    tickets: List['Ticket'] = Relationship(back_populates='state')

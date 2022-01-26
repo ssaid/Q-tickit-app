@@ -9,3 +9,4 @@ def get_repository(Repo_type: Type[BaseRepository]) -> Callable:
     def get_repo(db: AsyncSession = Depends(get_session)) -> Type[BaseRepository]:
         return Repo_type(db)
     return get_repo
+

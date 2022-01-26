@@ -7,10 +7,10 @@ class Role(SQLModel, table=True):
 
 
     if TYPE_CHECKING:
-        from .client import client
-        from .organization_client_link import organization_client_link
+        from .user import User
+        from .organization_user_link import OrganizationUserLink
 
 
-    clients: List['OrganizationClientLink'] = Relationship(back_populates='role')
+    users: List['OrganizationUserLink'] = Relationship(back_populates='role')
 
 

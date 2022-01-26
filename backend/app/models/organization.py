@@ -16,10 +16,10 @@ class Organization(SQLModel, table=True):
     #Relationships
     if TYPE_CHECKING:
         from .event import Event
-        from .organization_client_link import OrganizationClientLink
+        from .organization_user_link import OrganizationUserLink
 
     #o2m
     events: List['Event'] = Relationship(back_populates='organization')
 
     #m2m
-    clients: List['OrganizationClientLink'] = Relationship(back_populates='organizations')
+    users: List['OrganizationUserLink'] = Relationship(back_populates='organization')

@@ -16,9 +16,8 @@ class Ticket(SQLModel, table=True):
         from .link import Link
         from .state import State
 
-    link_id: int = Field(default=None, foreign_key='link.id')
-    link: 'Link' = Relationship(back_populates='tickets')
-
-
     state_id: int = Field(default=None, foreign_key='state.id')
     state: 'State' = Relationship(back_populates='tickets')
+
+    link_id: int = Field(default=None, foreign_key='link.id')
+    ticket_link: 'Link' = Relationship(back_populates='tickets')

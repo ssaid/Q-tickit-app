@@ -15,13 +15,13 @@ class Event(SQLModel, table=True):
 
     #Relationships
     if TYPE_CHECKING:
-        from .client import Client
+        from .user import User
         from .link import Link
         from .organization import Organization
 
     #m2o
-    client_id: int = Field(default=None, foreign_key='client.id')
-    client: 'Client' = Relationship(back_populates='events')
+    user_id: int = Field(default=None, foreign_key='users.id')
+    user: 'User' = Relationship(back_populates='events')
 
     organization_id: int = Field(default=None, foreign_key='organization.id')
     organization: 'Organization' = Relationship(back_populates='events')

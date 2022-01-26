@@ -18,4 +18,4 @@ class Link(SQLModel, table=True):
     event_id: int = Field(default=None, foreign_key='event.id')
     event: 'Event' = Relationship(back_populates='links')
 
-    tickets: List['Ticket'] = Relationship(back_populates='link')
+    tickets: List['Ticket'] = Relationship(back_populates='ticket_link')

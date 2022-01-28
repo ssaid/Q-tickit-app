@@ -27,8 +27,6 @@ async def get_organization(
     ):
     res = await organization_repository.get_organization(organization_id=organization_id)
 
-    for user in res.users:
-        print()
 
     return res
 

@@ -18,3 +18,10 @@ class RoleRepository(BaseRepository):
         return role
 
 
+    async def delete_role(self, *, role_id: int) -> None:
+        role = await self.db.get(Role, role_id)
+
+        await self.db.delete(role)
+
+        await self.db.commit()
+

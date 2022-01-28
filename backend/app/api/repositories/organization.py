@@ -34,11 +34,9 @@ class OrganizationRepository(BaseRepository):
 
         users = []
         for link in organization.users:
-            print(link)
             user = await self.db.get(User, link.user_id)
             role = await self.db.get(Role, link.role_id)
-            user = UserReadInOrganization(**{**user.dict(), 'role': role.name})
-            print(user)
+            user = UserReadInOrganization(**{**user.dict(), 'role': role.name if role else ''})
             users.append(user)
 
 

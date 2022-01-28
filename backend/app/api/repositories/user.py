@@ -25,7 +25,6 @@ class UserRepository(BaseRepository):
         query_values = new_user.dict()
         user = User(**query_values)
 
-        print(user)
         self.db.add(user)
         await self.db.commit()
 
@@ -49,8 +48,6 @@ class UserRepository(BaseRepository):
 
     async def get_users(self) -> List[UserRead]:
 
-        print("ESTA ES LA QUERY")
-        print(select(User))
         res = await self.db.execute(select(User))
         users = res.scalars().all()
 
@@ -60,43 +57,48 @@ class UserRepository(BaseRepository):
         return [UserRead(**user.dict()) for user in users]
 
 
-    # async def delete_user(self, id: int) -> UserInDB:
+    async def delete_user(self, id: int) -> None:
 
-    #     res = await self.db.execute( query=DELETE_CLIENT_QUERY, values={'id': id} )
-    #     print(res)
-    #     if not res:
-    #         raise HTTPException(status_code=404, detail="User not found")
-    #     return {'response': 'user deleted', 'id': id}
+        user = await self.db.get(User, id)
 
-    # async def update_user_commission(self, id: int, commission: float) -> UserInDB:
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
 
-    #     UPDATE_CLIENT_COMMISSION_QUERY = """
-    #         UPDATE user SET commission = :commission
-    #         WHERE id = :id
-    #         RETURNING id, login, name, email, commission, is_active;
-    #     """
+        await self.db.delete(user)
+        await self.db.commit()
 
-    #     user = await self.db.fetch_one( query=UPDATE_CLIENT_COMMISSION_QUERY, values={'id': id, 'commission': commission} )
 
-    #     if not user:
-    #         raise HTTPException(status_code=404, detail="User not found")
+    async def update_user_commission(self, id: int, commission: float) -> UserRead:
 
-    #     return {**user}
+        user = await self.db.get(User, id)
 
-    # async def update_user_status(self, id: int, is_active: bool) -> UserInDB:
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
 
-    #     UPDATE_CLIENT_STATUS_QUERY = """
-    #         UPDATE user SET is_active = :is_active
-    #         WHERE id = :id
-    #         RETURNING id, login, name, email, commission, is_active;
-    #     """
+        user.commission = commission
 
-    #     user = await self.db.fetch_one( query=UPDATE_CLIENT_STATUS_QUERY, values={'id': id, 'is_active': is_active} )
-    #     if not user:
-    #         raise HTTPException(status_code=404, detail="User not found")
-    #     return {**user}
+        self.db.add(user)
+        await self.db.commit()
+        self.db.refresh(user)
 
-    # async def update_user_password(self, id: int, old_password:str, new_password: str) -> UserInDB:
+        return {**user.dict()}
+
+    async def update_user_status(self, id: int, is_active: bool) -> UserRead:
+
+        user = await self.db.get(User, id)
+
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+
+        user.is_active = is_active
+
+        self.db.add(user)
+        await self.db.commit()
+        self.db.refresh(user)
+
+        return {**user.dict()}
+
+    # async def update_user_password(self, id: int, old_password:str, new_password: str) -> UserRead:
 
     #     UPDATE_CLIENT_PASSWORD_QUERY = """
     #         UPDATE user SET password = :password

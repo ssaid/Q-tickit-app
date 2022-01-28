@@ -43,40 +43,33 @@ async def get_users(
 
 
 
-# @router.delete("/{id}", responses={204: {'response': 'user deleted', 'id': id}})
-# async def delete_user(
-#     id: int,
-#     user_repo: UserRepository = Depends(get_repository(UserRepository))
-#     ):
-#     res = await user_repo.delete_user(id)
-#     if not res:
-#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+@router.delete("/{id}")
+async def delete_user(
+    id: int,
+    user_repo: UserRepository = Depends(get_repository(UserRepository))
+    ):
+    await user_repo.delete_user(id)
 
-#     return res
+    return {"message": "User deleted"}
 
-# @router.put("/{id}/commission", response_model=UserInDB)
-# async def update_user_commission(
-#     id: int,
-#     commission: CommissionUpdate,
-#     user_repo: UserRepository = Depends(get_repository(UserRepository))
-#     ):
-#     user = await user_repo.update_user_commission(id, commission.commission)
-#     if not user:
-#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+@router.put("/{id}/commission", response_model=UserRead)
+async def update_user_commission(
+    request: UserCommission,
+    user_repo: UserRepository = Depends(get_repository(UserRepository))
+    ):
+    user = await user_repo.update_user_commission(request.id, request.commission)
+    if not user:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
 
-#     return user
+    return user
 
-# @router.put("/{id}/status", response_model=UserInDB)
-# async def update_user_status(
-#     id: int,
-#     is_active: StatusUpdate,
-#     user_repo: UserRepository = Depends(get_repository(UserRepository))
-#     ):
-#     user = await user_repo.update_user_status(id, is_active.is_active)
-#     if not user:
-#         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
+@router.put("/{id}/status", response_model=UserRead)
+async def update_user_status(
+    request: UserIsActive,
+    user_repo: UserRepository = Depends(get_repository(UserRepository))
+    ):
 
-#     return user
+    return await user_repo.update_user_status(request.id, request.is_active)
 
 # @router.put("/{id}")
 # async def update_user_password(

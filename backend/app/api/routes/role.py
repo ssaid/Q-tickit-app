@@ -19,3 +19,11 @@ async def create_role(
 
     return await role_repository.create_role(new_role=role)
 
+@router.delete('/{role_id}')
+async def delete_role(
+    role_id: int,
+    role_repository: RoleRepository = Depends(
+        get_repository(RoleRepository))
+    ):
+
+    return await role_repository.delete_role(role_id=role_id)

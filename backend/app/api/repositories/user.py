@@ -25,6 +25,7 @@ class UserRepository(BaseRepository):
         query_values = new_user.dict()
         user = User(**query_values)
 
+        print(user)
         self.db.add(user)
         await self.db.commit()
 
@@ -34,7 +35,10 @@ class UserRepository(BaseRepository):
 
     async def get_user(self, id: int) -> UserReadWithRelationships:
 
-        res = await self.db.execute(select(User).where(User.id == id).options(joinedload(User.events)))
+        res = await self.db.execute(select(User).where(User.id == id).options(
+                                        joinedload(User.organizations),
+                                        joinedload(User.events))
+                                    )
         user = res.scalars().first()
 
         if not user:

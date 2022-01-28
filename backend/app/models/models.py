@@ -16,6 +16,12 @@ class UserBase(SQLModel):
 class UserRead(UserBase):
     id: int
 
+class UserReadInOrganization(SQLModel):
+    id: int
+    name: str
+    is_active: bool
+    role: str
+
 class UserReadWithRelationships(UserRead):
 
     pass
@@ -105,9 +111,8 @@ class Link(SQLModel, table=True):
 
 #%% Organization
 
+class OrganizationCreate(SQLModel):
 
-class Organization(SQLModel, table=True):
-    id: Optional[int] = Field(int, primary_key=True, index=True)
     name: str
     city: Optional[str] = None
     state: Optional[str] = None
@@ -118,11 +123,23 @@ class Organization(SQLModel, table=True):
     is_active: Optional[bool] = True
     website: Optional[str] = None
 
+
+class Organization(OrganizationCreate, table=True):
+
+    id: Optional[int] = Field(default=None, primary_key=True, index=True)
+
     #o2m
     events: List[Event] = Relationship(back_populates='organization')
 
     #m2m
     users: List['OrganizationUserLink'] = Relationship(back_populates='organization')
+
+class OrganizationRead(OrganizationCreate):
+    id: int
+
+    events: List[Event] = []
+
+    users: List['UserReadInOrganization'] = []
 
 
 #%% OrganizationUserLink
@@ -145,11 +162,14 @@ class OrganizationUserLink(SQLModel, table=True):
 
 #%% Role
 
+class RoleCreate(SQLModel):
 
-class Role(SQLModel, table=True):
+    name: str
+
+
+class Role(RoleCreate, table=True):
 
     id: Optional[int] = Field(default=None, primary_key=True)
-    name: str
 
     users: List[OrganizationUserLink] = Relationship(back_populates='role')
 
@@ -197,4 +217,7 @@ OrganizationUserLink.update_forward_refs()
 Role.update_forward_refs()
 State.update_forward_refs()
 Ticket.update_forward_refs()
+OrganizationRead.update_forward_refs()
+UserReadInOrganization.update_forward_refs()
+
 

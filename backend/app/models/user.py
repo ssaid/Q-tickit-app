@@ -1,6 +1,9 @@
-from typing import Optional, List, TYPE_CHECKING, ForwardRef
+from typing import Optional, List, TYPE_CHECKING
 from sqlmodel import SQLModel, Field, Relationship
 
+if TYPE_CHECKING:
+    from .event import Event
+    from .organization_user_link import OrganizationUserLink
 
 
 class UserBase(SQLModel):
@@ -13,6 +16,15 @@ class UserBase(SQLModel):
 class UserRead(UserBase):
     id: int
 
+class UserReadWithRelationships(UserRead):
+
+    pass
+    #o2m
+    # event: List['Event'] = []
+
+    #m2m
+    # organizations: List['OrganizationUserLink'] = []
+
 class UserCreate(UserBase):
     password: str
 
@@ -23,9 +35,6 @@ class User(UserCreate, table=True):
     id: Optional[int] = Field(default=None, primary_key=True, index=True)
 
     # Relationships
-    if TYPE_CHECKING:
-        from .event import Event
-        from .organization_user_link import OrganizationUserLink
 
     #o2m
     events: List['Event'] = Relationship(back_populates='user')
@@ -34,17 +43,7 @@ class User(UserCreate, table=True):
     organizations: List['OrganizationUserLink'] = Relationship(back_populates='user')
 
 
-class UserReadWithRelationships(UserRead):
-    # Relationships
-    if TYPE_CHECKING:
-        from .event import Event
-        from .organization_user_link import OrganizationUserLink
 
-    #o2m
-    events: List['Event'] = []
-
-    #m2m
-    organizations: List['OrganizationUserLink'] = []
 
 
 

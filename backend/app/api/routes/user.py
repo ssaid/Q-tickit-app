@@ -4,15 +4,14 @@ from typing import List, ForwardRef
 
 from ..repositories.user import UserRepository
 from ..dependencies.database import get_repository
-from ...models.user import *
+from ...models.models import *
 
-from ...db.db import get_session
-from sqlalchemy.ext.asyncio import AsyncSession
 
 router = APIRouter()
 
 
 #TODO: ver por que no funciona con async algunas querys
+#TODO: que onda con los circular imports en los models ?? (no funciona TYPE_CHECKING??)
 
 @router.post("/", response_model=UserRead, status_code=status.HTTP_201_CREATED)
 async def create_user(

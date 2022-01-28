@@ -10,6 +10,7 @@ app = FastAPI(title=PROJECT_NAME, version=VERSION)
 
 @app.on_event("startup")
 async def on_startup():
+    pass
     await init_db()
 
 

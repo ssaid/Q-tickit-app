@@ -6,7 +6,7 @@ from passlib.context import CryptContext
 from sqlmodel import select
 
 from .base import BaseRepository
-from ...models.user import *
+from ...models.models import *
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -34,10 +34,8 @@ class UserRepository(BaseRepository):
 
     async def get_user(self, id: int) -> UserReadWithRelationships:
 
-        # user = await self.db.get(User, id)
         res = await self.db.execute(select(User).where(User.id == id).options(joinedload(User.events)))
         user = res.scalars().first()
-        print({**user.dict(), 'events': [event.dict() for event in user.events]})
 
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
@@ -47,6 +45,8 @@ class UserRepository(BaseRepository):
 
     async def get_users(self) -> List[UserRead]:
 
+        print("ESTA ES LA QUERY")
+        print(select(User))
         res = await self.db.execute(select(User))
         users = res.scalars().all()
 
@@ -57,11 +57,6 @@ class UserRepository(BaseRepository):
 
 
     # async def delete_user(self, id: int) -> UserInDB:
-
-    #     DELETE_CLIENT_QUERY = """
-    #         DELETE FROM user WHERE id = :id
-    #         RETURNING id;
-    #     """
 
     #     res = await self.db.execute( query=DELETE_CLIENT_QUERY, values={'id': id} )
     #     print(res)

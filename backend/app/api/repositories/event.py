@@ -17,3 +17,4 @@ class EventRepository(BaseRepository):
 
         return event
 
+

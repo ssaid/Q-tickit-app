@@ -122,6 +122,7 @@ class OrganizationCreate(SQLModel):
     # logo: Optional[bytes] = None
     is_active: Optional[bool] = True
     website: Optional[str] = None
+    user_id: int
 
 
 class Organization(OrganizationCreate, table=True):
@@ -154,24 +155,8 @@ class OrganizationUserLink(SQLModel, table=True):
     user_id: int = Field(default=None, foreign_key='users.id')
     user: User = Relationship(back_populates='organizations')
 
-    role_id: int = Field(default=None, foreign_key='role.id')
-    role: 'Role' = Relationship(back_populates='users')
+    permissions: Optional[str] = "['camera','home']"
 
-
-
-
-#%% Role
-
-class RoleCreate(SQLModel):
-
-    name: str
-
-
-class Role(RoleCreate, table=True):
-
-    id: Optional[int] = Field(default=None, primary_key=True)
-
-    users: List[OrganizationUserLink] = Relationship(back_populates='role')
 
 #%% State
 
@@ -214,7 +199,6 @@ Event.update_forward_refs()
 Link.update_forward_refs()
 Organization.update_forward_refs()
 OrganizationUserLink.update_forward_refs()
-Role.update_forward_refs()
 State.update_forward_refs()
 Ticket.update_forward_refs()
 OrganizationRead.update_forward_refs()

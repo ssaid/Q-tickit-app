@@ -17,6 +17,14 @@ class OrganizationRepository(BaseRepository):
         await self.db.commit()
         await self.db.refresh(organization)
 
+        user = await self.db.get(User, new_organization.user_id)
+        permissions = "['home','camera','stats','config','events']"
+
+        link = OrganizationUserLink(organization=organization, user=user, permissions=permissions)
+
+        self.db.add(link)
+        await self.db.commit()
+
         return organization
 
     async def get_organization(self, *, organization_id: int) -> OrganizationRead:

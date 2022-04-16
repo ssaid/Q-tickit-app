@@ -6,6 +6,15 @@ from datetime import datetime
 
 #%% User
 
+class UserCredentials(SQLModel):
+    login: str
+    password: str
+
+class UserAuthenticated(SQLModel):
+    token: str
+    expiration: datetime
+    user_id: int
+
 class UserBase(SQLModel):
     name: str
     login: str
@@ -34,6 +43,8 @@ class UserReadWithRelationships(UserRead):
 class UserCreate(UserBase):
     password: str
 
+class UserValidation(UserCreate):
+    id: int
 
 class User(UserCreate, table=True):
     __tablename__ = 'users'

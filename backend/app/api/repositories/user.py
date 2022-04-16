@@ -1,12 +1,19 @@
 from fastapi import APIRouter, Depends, status
 from fastapi.exceptions import HTTPException
 from sqlalchemy.orm import Session, joinedload
-from typing import List
+from typing import List, Optional
 from passlib.context import CryptContext
 from sqlmodel import select
+from datetime import timedelta
+from datetime import datetime
 
 from .base import BaseRepository
 from ...models.models import *
+
+from jose import JWTError, jwt
+from ...db.config import SECRET_KEY
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = timedelta(minutes=30)
 
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -18,6 +25,12 @@ def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
 class UserRepository(BaseRepository):
+    def create_access_token(self, user: str, expires_delta: Optional[timedelta] = ACCESS_TOKEN_EXPIRE_MINUTES):
+        print(SECRET_KEY)
+        expire = datetime.utcnow() + expires_delta
+        to_encode = {'user': user, 'exp': expire}
+        encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+        return encoded_jwt, expire
 
     async def create_user(self, *, new_user: UserCreate) -> UserRead:
 
@@ -30,6 +43,18 @@ class UserRepository(BaseRepository):
 
         await self.db.refresh(user)
         return UserRead(**user.dict())
+
+    async def get_user_by_login(self, *, login: str) -> UserValidation:
+        res = await self.db.execute(select(User).where(User.login == login))
+        user = res.scalars().first()
+
+        if not user:
+            raise HTTPException(status_code=404, detail="User not found")
+
+        return UserValidation(**user.dict())
+
+    def check_credentials(self, *, encrypted_password, plain_password) -> bool:
+        return verify_password(plain_password, encrypted_password)
 
 
     async def get_user(self, id: int) -> UserReadWithRelationships:

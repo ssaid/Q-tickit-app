@@ -16,7 +16,6 @@ async def create_organization(
     organization_repository: OrganizationRepository = Depends(
         get_repository(OrganizationRepository))
     ):
-
     return await organization_repository.create_organization(new_organization=organization)
 
 @router.get('/', response_model=OrganizationRead)
@@ -34,7 +33,7 @@ async def get_organization(
 async def add_user_to_organization(
     organization_id: int,
     user_id: int,
-    role_id: int,
+    permissions: str = None,
     organization_repository: OrganizationRepository = Depends(
         get_repository(OrganizationRepository))
     ):

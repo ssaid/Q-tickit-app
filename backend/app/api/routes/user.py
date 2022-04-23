@@ -21,6 +21,26 @@ async def create_user(
 
     return await user_repo.create_user(new_user=new_user)
 
+@router.post("/authenticate", response_model=UserAuthenticated)
+async def authenticate_user(
+    credentials: UserCredentials,
+    user_repo: UserRepository = Depends(get_repository(UserRepository))
+    ) -> UserAuthenticated:
+    user: UserValidation = await user_repo.get_user_by_login(login=credentials.login)
+    if not user:
+        raise HTTPException(status_code=403, detail="Credentials Not Valid")
+    print(user)
+    print('--')
+    print(credentials)
+    is_valid = user_repo.check_credentials(encrypted_password=user.password, plain_password=credentials.password)
+
+    if not is_valid:
+        raise HTTPException(status_code=403, detail="Credentials Not Valid")
+
+    jwt_token, expiry_date = user_repo.create_access_token(user.login)
+
+    return UserAuthenticated(token=jwt_token, expiration=expiry_date, user_id=user.id)
+
 
 @router.get("/{id}", response_model=UserReadWithRelationships)
 async def get_user(

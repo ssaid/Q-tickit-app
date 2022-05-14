@@ -32,7 +32,7 @@ class UserRepository(BaseRepository):
         encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
         return encoded_jwt, expire
 
-    async def create_user(self, *, new_user: UserCreate) -> UserRead:
+    async def create_user(self, *, new_user: UserCreate) -> UserAuthenticated:
 
         new_user.password = get_password_hash(new_user.password)
         query_values = new_user.dict()
@@ -42,7 +42,11 @@ class UserRepository(BaseRepository):
         await self.db.commit()
 
         await self.db.refresh(user)
-        return UserRead(**user.dict())
+
+        jwt_token, expiry_date = self.create_access_token(user.login)
+
+        return UserAuthenticated(token=jwt_token, expiration=expiry_date, user_id=user.id)
+
 
     async def get_user_by_login(self, *, login: str) -> UserValidation:
         res = await self.db.execute(select(User).where(User.login == login))

@@ -13,7 +13,7 @@ router = APIRouter()
 #TODO: ver por que no funciona con async algunas querys
 #TODO: que onda con los circular imports en los models ?? (no funciona TYPE_CHECKING??)
 
-@router.post("/", response_model=UserRead, status_code=status.HTTP_201_CREATED)
+@router.post("/", response_model=UserAuthenticated, status_code=status.HTTP_201_CREATED)
 async def create_user(
     new_user: UserCreate,
     user_repo: UserRepository = Depends(get_repository(UserRepository))

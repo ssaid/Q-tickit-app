@@ -13,6 +13,7 @@ import {
   Login,
   Register,
 } from '../pages';
+import { PrivateRoute } from './PrivateRoute';
 
 
 export const AppRouter = () => {
@@ -21,12 +22,17 @@ export const AppRouter = () => {
     <AuthProvider>
       <Router>
         <Routes>
-          <Route path="/" element={ <Home /> } >
-            <Route path="/stats" element={ <Stats /> } />
-            <Route path="/configuration" element={ <Configuration /> } />
-            <Route path="/events" element={ <Events /> } />
-            <Route path="/camera" element={ <Camera /> } />
-          </Route>
+            <Route path="/" element={ 
+                <PrivateRoute>
+                  <Home />
+                </PrivateRoute> 
+              } 
+            >
+              <Route path="/stats" element={ <PrivateRoute><Stats /></PrivateRoute> } />
+              <Route path="/configuration" element={ <PrivateRoute><Configuration /></PrivateRoute> } />
+              <Route path="/events" element={ <PrivateRoute><Events /></PrivateRoute> } />
+              <Route path="/camera" element={ <PrivateRoute><Camera /></PrivateRoute> } />
+            </Route>
           <Route path="/login" element={ <Login /> } />
           <Route path="/register" element={ <Register /> } />
         </Routes>

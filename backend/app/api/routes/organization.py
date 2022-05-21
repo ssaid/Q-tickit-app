@@ -18,7 +18,7 @@ async def create_organization(
     ):
     return await organization_repository.create_organization(new_organization=organization)
 
-@router.get('/', response_model=OrganizationRead)
+@router.get('/get_organization_by_id', response_model=OrganizationRead)
 async def get_organization(
     organization_id: int,
     organization_repository: OrganizationRepository = Depends(
@@ -27,6 +27,16 @@ async def get_organization(
     res = await organization_repository.get_organization(organization_id=organization_id)
 
 
+    return res
+
+
+@router.get('/get_organization_by_user/{user_id}', response_model=List[OrganizationRead])
+async def get_organization_of_user(
+    user_id: int,
+    organization_repository: OrganizationRepository = Depends(
+        get_repository(OrganizationRepository))
+    ):
+    res = await organization_repository.get_organizations_for_user(user_id=user_id)
     return res
 
 @router.post('/add_user', response_model=OrganizationRead)

@@ -149,8 +149,6 @@ class Organization(OrganizationCreate, table=True):
 class OrganizationRead(OrganizationCreate):
     id: int
 
-    events: List[Event] = []
-
     users: List['UserReadInOrganization'] = []
 
 
@@ -160,10 +158,10 @@ class OrganizationUserLink(SQLModel, table=True):
 
     id: int = Field(default=None, primary_key=True)
 
-    organization_id: int = Field(default=None, foreign_key='organization.id')
+    organization_id: int = Field(default=None, foreign_key='organization.id', nullable=False)
     organization: Organization = Relationship(back_populates='users')
 
-    user_id: int = Field(default=None, foreign_key='users.id')
+    user_id: int = Field(default=None, foreign_key='users.id', nullable=False)
     user: User = Relationship(back_populates='organizations')
 
     permissions: Optional[str] = "['camera','home']"

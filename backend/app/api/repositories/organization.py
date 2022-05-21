@@ -54,6 +54,14 @@ class OrganizationRepository(BaseRepository):
             'users': users
         }
 
+    async def get_organizations_for_user(self, user_id) -> List[Organization]:
+        res = await self.db.execute(select(Organization).options(
+                                        joinedload(Organization.users, innerjoin=True)).filter_by(user_id=user_id)
+                                    )
+        organizations = res.scalars()
+
+        return [organization.dict() for organization in organizations.unique()]
+
     async def get_organizations(self) -> List[Organization]:
 
         res = await self.db.execute(select(Organization).options(

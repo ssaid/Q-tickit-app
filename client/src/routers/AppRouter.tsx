@@ -13,6 +13,7 @@ import {
   Login,
   Register,
 } from '../pages';
+import {Principal} from '../pages/Principal';
 import { PrivateRoute } from './PrivateRoute';
 
 
@@ -28,6 +29,7 @@ export const AppRouter = () => {
                 </PrivateRoute> 
               } 
             >
+              <Route path="/" element={ <PrivateRoute><Principal /></PrivateRoute> } />
               <Route path="/stats" element={ <PrivateRoute><Stats /></PrivateRoute> } />
               <Route path="/configuration" element={ <PrivateRoute><Configuration /></PrivateRoute> } />
               <Route path="/events" element={ <PrivateRoute><Events /></PrivateRoute> } />

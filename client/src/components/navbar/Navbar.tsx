@@ -1,10 +1,12 @@
 import{
-  Link
+  NavLink
+  
 } from 'react-router-dom';
 import {
   Box,
   Stack,
   Icon,
+  Link,
 
 } from '@chakra-ui/react';
 
@@ -28,9 +30,9 @@ import {
 export const Navbar = () => {
   return (
     <Stack 
-      position='fixed'
+      position='absolute'
       bottom='0'
-      bg='blackAlpha.700' 
+      bg='primary' 
       h={12} 
       p={0}
       m={0}
@@ -40,27 +42,39 @@ export const Navbar = () => {
       justifyContent='space-around'
       alignContent='center'
     >
-      <Link to='/'>
+      <Link 
+        as={NavLink} to='/'
+        color='textSecondary'
+        _activeLink={{color: 'textPrimary'}}
+
+      >
         <Box 
           p={4}
           display='flex'
           alignSelf='center'
-          color='white'
         >
           <Icon w={6} h={6} as={ MdMapsHomeWork } />
         </Box>
       </Link>
-      <Link to='events'>
+      <Link 
+        as={NavLink} to='events'
+        color='textSecondary'
+        _activeLink={{color: 'textPrimary'}}
+      >
         <Box 
           p={4}
           display='flex'
           alignSelf='center'
-          color='white'
         >
           <Icon w={5} h={5} as={ BsFillCalendar2EventFill } />
         </Box>
       </Link>
-      <Link to='/camera'>
+      <Link
+        as={NavLink}
+        to='/camera'
+        color='textSecondary'
+        _activeLink={{color: 'textPrimary'}}
+      >
         <Box 
           p={4}
           display='flex'
@@ -69,22 +83,30 @@ export const Navbar = () => {
           <Icon w={5} h={5} as={ IoQrCodeSharp } />
         </Box>
       </Link>
-      <Link to='stats'>
+      <Link
+        as={NavLink}
+        to='stats'
+        color='textSecondary'
+        _activeLink={{color: 'textPrimary'}}
+      >
         <Box 
           p={4}
           display='flex'
           alignSelf='center'
-          color='white'
         >
           <Icon w={5} h={5} as={ IoBarChartSharp } />
         </Box>
       </Link>
-      <Link to='/configuration'>
+      <Link
+        as={NavLink}
+        to='/configuration'
+        color='textSecondary'
+        _activeLink={{color: 'textPrimary'}}
+      >
         <Box 
           p={4}
           display='flex'
           alignSelf='center'
-          color='white'
         >
           <Icon w={5} h={5} as={ BsGearFill } />
         </Box>

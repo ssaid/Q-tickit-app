@@ -18,7 +18,7 @@ export const Header = ({ organization }: Props) => {
   // if (!organization){
   //   return(
   //     <HStack
-  //       bg="blackAlpha.700"
+  //       bg="primary"
   //       h='24'
   //     >
   //       <Text> Not implemented </Text>
@@ -30,7 +30,7 @@ export const Header = ({ organization }: Props) => {
 
   return (
     <HStack
-      bg="blackAlpha.700"
+      bg="primary"
       h='24'
       p={4}
     >

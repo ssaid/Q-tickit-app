@@ -1,3 +1,4 @@
+import {Box, Stack} from "@chakra-ui/react"
 import {useState} from "react"
 
 
@@ -10,9 +11,11 @@ export const Principal = () => {
   const [organizations, setOrganizations] = useState<Organization[]>([])
   
   return (
-    <>
+    <Stack h='100%'>
       <Header organization={ organizations[0] } />
-      Principal 
-    </> 
+      <Stack justifyContent='center' alignItems='center' h='100%'>
+        <Box>Principal</Box> 
+      </Stack>
+    </Stack> 
   )
 }

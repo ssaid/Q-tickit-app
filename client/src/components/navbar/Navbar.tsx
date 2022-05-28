@@ -46,6 +46,7 @@ export const Navbar = () => {
         as={NavLink} to='/'
         color='textSecondary'
         _activeLink={{color: 'textPrimary'}}
+        _focus={{ringColor: 'transparent'}}
 
       >
         <Box 
@@ -60,6 +61,7 @@ export const Navbar = () => {
         as={NavLink} to='events'
         color='textSecondary'
         _activeLink={{color: 'textPrimary'}}
+        _focus={{ringColor: 'transparent'}}
       >
         <Box 
           p={4}
@@ -74,6 +76,7 @@ export const Navbar = () => {
         to='/camera'
         color='textSecondary'
         _activeLink={{color: 'textPrimary'}}
+        _focus={{ringColor: 'transparent'}}
       >
         <Box 
           p={4}
@@ -88,6 +91,7 @@ export const Navbar = () => {
         to='stats'
         color='textSecondary'
         _activeLink={{color: 'textPrimary'}}
+        _focus={{ringColor: 'transparent'}}
       >
         <Box 
           p={4}
@@ -102,6 +106,7 @@ export const Navbar = () => {
         to='/configuration'
         color='textSecondary'
         _activeLink={{color: 'textPrimary'}}
+        _focus={{ringColor: 'transparent'}}
       >
         <Box 
           p={4}

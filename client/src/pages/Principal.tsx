@@ -14,7 +14,21 @@ export const Principal = () => {
     <Stack h='100%'>
       <Header organization={ organizations[0] } />
       <Stack justifyContent='center' alignItems='center' h='100%'>
-        <Box>Principal</Box> 
+        {
+          !organizations.length 
+            ?
+            (
+              <Box>
+                it seems like you don't have any organization yet
+              </Box>
+
+            )
+            :
+            (
+              <Box>Hello again!</Box> 
+            )
+
+        }
       </Stack>
     </Stack> 
   )

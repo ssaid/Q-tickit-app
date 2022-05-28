@@ -7,4 +7,12 @@ export default extendTheme({
     textPrimary: theme.colors.white,
     textSecondary: theme.colors.gray[400],
   },
+  styles:{
+    global: {
+      'html, body, #root': {
+        height: '100vh',
+        overflow: 'hidden',
+      },
+    },
+  }
 })

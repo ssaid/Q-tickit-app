@@ -32,24 +32,24 @@ class UserRepository(BaseRepository):
         encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
         return encoded_jwt, expire
 
-    async def create_user(self, *, new_user: UserCreate) -> UserAuthenticated:
+    def create_user(self, *, new_user: UserCreate) -> UserAuthenticated:
 
         new_user.password = get_password_hash(new_user.password)
         query_values = new_user.dict()
         user = User(**query_values)
 
         self.db.add(user)
-        await self.db.commit()
+        self.db.commit()
 
-        await self.db.refresh(user)
+        self.db.refresh(user)
 
         jwt_token, expiry_date = self.create_access_token(user.login)
 
         return UserAuthenticated(token=jwt_token, expiration=expiry_date, user_id=user.id)
 
 
-    async def get_user_by_login(self, *, login: str) -> UserValidation:
-        res = await self.db.execute(select(User).where(User.login == login))
+    def get_user_by_login(self, *, login: str) -> UserValidation:
+        res = self.db.execute(select(User).where(User.login == login))
         user = res.scalars().first()
 
         if not user:
@@ -61,9 +61,9 @@ class UserRepository(BaseRepository):
         return verify_password(plain_password, encrypted_password)
 
 
-    async def get_user(self, id: int) -> UserReadWithRelationships:
+    def get_user(self, id: int) -> UserReadWithRelationships:
 
-        res = await self.db.execute(select(User).where(User.id == id).options(
+        res = self.db.execute(select(User).where(User.id == id).options(
                                         joinedload(User.organizations),
                                         joinedload(User.events))
                                     )
@@ -75,9 +75,9 @@ class UserRepository(BaseRepository):
         return {**user.dict(), 'events': [event.dict() for event in user.events]}
 
 
-    async def get_users(self) -> List[UserRead]:
+    def get_users(self) -> List[UserRead]:
 
-        res = await self.db.execute(select(User))
+        res = self.db.execute(select(User))
         users = res.scalars().all()
 
         if not users:
@@ -86,20 +86,20 @@ class UserRepository(BaseRepository):
         return [UserRead(**user.dict()) for user in users]
 
 
-    async def delete_user(self, id: int) -> None:
+    def delete_user(self, id: int) -> None:
 
-        user = await self.db.get(User, id)
+        user = self.db.get(User, id)
 
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
 
-        await self.db.delete(user)
-        await self.db.commit()
+        self.db.delete(user)
+        self.db.commit()
 
 
-    async def update_user_commission(self, id: int, commission: float) -> UserRead:
+    def update_user_commission(self, id: int, commission: float) -> UserRead:
 
-        user = await self.db.get(User, id)
+        user = self.db.get(User, id)
 
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
@@ -107,14 +107,14 @@ class UserRepository(BaseRepository):
         user.commission = commission
 
         self.db.add(user)
-        await self.db.commit()
+        self.db.commit()
         self.db.refresh(user)
 
         return {**user.dict()}
 
-    async def update_user_status(self, id: int, is_active: bool) -> UserRead:
+    def update_user_status(self, id: int, is_active: bool) -> UserRead:
 
-        user = await self.db.get(User, id)
+        user = self.db.get(User, id)
 
         if not user:
             raise HTTPException(status_code=404, detail="User not found")
@@ -122,12 +122,12 @@ class UserRepository(BaseRepository):
         user.is_active = is_active
 
         self.db.add(user)
-        await self.db.commit()
+        self.db.commit()
         self.db.refresh(user)
 
         return {**user.dict()}
 
-    # async def update_user_password(self, id: int, old_password:str, new_password: str) -> UserRead:
+    # def update_user_password(self, id: int, old_password:str, new_password: str) -> UserRead:
 
     #     UPDATE_CLIENT_PASSWORD_QUERY = """
     #         UPDATE user SET password = :password
@@ -140,12 +140,12 @@ class UserRepository(BaseRepository):
     #         WHERE id = :id;
     #     """
 
-    #     current_password = await self.db.fetch_one(query=GET_CURRENT_PASSWORD_QUERY, values={'id': id})
+    #     current_password = self.db.fetch_one(query=GET_CURRENT_PASSWORD_QUERY, values={'id': id})
 
     #     if not verify_password(old_password, current_password['password']):
     #         raise HTTPException(status_code=400, detail="Wrong password")
 
-    #     user = await self.db.fetch_one( query=UPDATE_CLIENT_PASSWORD_QUERY, values={'id': id, 'password': get_password_hash(new_password)} )
+    #     user = self.db.fetch_one( query=UPDATE_CLIENT_PASSWORD_QUERY, values={'id': id, 'password': get_password_hash(new_password)} )
     #     if not user:
     #         raise HTTPException(status_code=404, detail="User not found")
     #     return {'response': 'Password updated'}

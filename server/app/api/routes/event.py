@@ -11,9 +11,9 @@ router = APIRouter()
 
 
 @router.post('/', response_model=Event, status_code=status.HTTP_201_CREATED)
-async def create_event(
+def create_event(
     event: EventCreate,
     event_repository: EventRepository = Depends(get_repository(EventRepository))):
 
-    return await event_repository.create_event(new_event=event)
+    return event_repository.create_event(new_event=event)
 

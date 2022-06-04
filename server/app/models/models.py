@@ -9,15 +9,15 @@ from datetime import datetime
 
 class OrganizationUserLink(SQLModel, table=True):
 
-    id: int = Field(default=None, primary_key=True)
+    # id: int = Field(default=None, primary_key=True)
 
-    organization_id: int = Field(default=None, foreign_key='organization.id', nullable=False)
-    organization: 'Organization' = Relationship(back_populates='users')
+    organization_id: int = Field(primary_key=True, default=None, foreign_key='organization.id', nullable=False)
+    # organization: 'Organization' = Relationship(back_populates='users')
 
-    user_id: int = Field(default=None, foreign_key='users.id', nullable=False)
-    user: 'User' = Relationship(back_populates='organizations')
+    user_id: int = Field(primary_key=True, default=None, foreign_key='users.id', nullable=False)
+    # user: 'User' = Relationship(back_populates='organizations')
 
-    permissions: Optional[str] = "['camera','home']"
+    # permissions: Optional[str] = "['camera','home']"
 
 #%% User
 
@@ -48,10 +48,6 @@ class UserReadInOrganization(SQLModel):
 
 class UserReadWithRelationships(UserRead):
 
-    pass
-    #o2m
-    events: List['Event'] = []
-
     #m2m
     organizations: List['OrganizationUserLink'] = []
 
@@ -72,7 +68,8 @@ class User(UserCreate, table=True):
     events: List['Event'] = Relationship(back_populates='user')
 
     #m2m
-    organizations: List['OrganizationUserLink'] = Relationship(back_populates='user')
+    # organizations: List['OrganizationUserLink'] = Relationship(back_populates='user')
+    organizations: List[OrganizationUserLink] = Relationship(back_populates='users', link_model=OrganizationUserLink)
 
 
 class UserCommission(SQLModel):
@@ -162,7 +159,7 @@ class Organization(OrganizationCreate, table=True):
     events: List[Event] = Relationship(back_populates='organization')
 
     #m2m
-    users: List['OrganizationUserLink'] = Relationship(back_populates='organization')
+    users: List[OrganizationUserLink] = Relationship(back_populates='organizations', link_model=OrganizationUserLink)
 
 
 #%% State

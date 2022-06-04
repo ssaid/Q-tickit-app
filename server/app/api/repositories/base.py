@@ -1,5 +1,5 @@
-from sqlalchemy.ext.asyncio import AsyncSession
+from sqlmodel import Session
 
 class BaseRepository:
-    def __init__(self, db: AsyncSession) -> None:
+    def __init__(self, db: Session) -> None:
         self.db = db

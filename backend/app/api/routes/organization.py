@@ -48,4 +48,4 @@ async def add_user_to_organization(
         get_repository(OrganizationRepository))
     ):
 
-    return await organization_repository.add_user(organization_id=organization_id, user_id=user_id, role_id=role_id)
+    return await organization_repository.add_user(organization_id=organization_id, user_id=user_id, permissions=permissions)

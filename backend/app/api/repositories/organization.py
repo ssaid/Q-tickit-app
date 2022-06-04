@@ -28,11 +28,7 @@ class OrganizationRepository(BaseRepository):
         return organization
 
     async def get_organization(self, *, organization_id: int) -> OrganizationRead:
-
-        res = await self.db.execute(select(Organization).where(Organization.id == organization_id).options(
-                                        joinedload(Organization.users),
-                                        joinedload(Organization.events))
-                                    )
+        res = self.db.execute(select(Organization).where(Organization.id == organization_id).join(Organization.users))
         organization = res.scalars().first()
 
 
@@ -41,10 +37,16 @@ class OrganizationRepository(BaseRepository):
 
 
         users = []
+        # import wdb; wdb.set_trace()
         for link in organization.users:
             user = await self.db.get(User, link.user_id)
-            role = await self.db.get(Role, link.role_id)
-            user = UserReadInOrganization(**{**user.dict(), 'role': role.name if role else ''})
+            dd = {
+                'id': user.id,
+                'name': user.name,
+                'is_active': user.is_active,
+                'permissions': link.permissions
+            }
+            user = UserReadInOrganization(**dd)
             users.append(user)
 
 
@@ -53,7 +55,7 @@ class OrganizationRepository(BaseRepository):
             'events': [event.dict() for event in organization.events],
             'users': users
         }
-
+        res = await res
     async def get_organizations_for_user(self, user_id) -> List[Organization]:
         res = await self.db.execute(select(Organization).options(
                                         joinedload(Organization.users, innerjoin=True)).filter_by(user_id=user_id)
@@ -73,14 +75,12 @@ class OrganizationRepository(BaseRepository):
         return [{**organization.dict(), 'events': [event.dict() for event in organization.events]} for organization in organizations]
 
 
-    async def add_user(self, *, organization_id: int, user_id: int, role_id: int) -> Organization:
+    async def add_user(self, *, organization_id: int, user_id: int, permissions: str) -> Organization:
 
 
         organization = await self.db.get(Organization, organization_id)
         user = await self.db.get(User, user_id)
-        role = await self.db.get(Role, role_id)
-
-        link = OrganizationUserLink(organization=organization, user=user, role=role)
+        link = OrganizationUserLink(organization_id=organization.id, user_id=user.id, permissions=permissions)
 
         self.db.add(link)
         await self.db.commit()

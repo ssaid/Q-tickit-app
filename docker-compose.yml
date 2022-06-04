@@ -12,6 +12,7 @@ services:
       - ./backend/.env
     ports:
       - 8000:8000
+      - 1984:1984
     depends_on:
       - db
 

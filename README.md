@@ -1,6 +1,6 @@
 # Q-tickit-app
 ## Deployment with docker
-1. Define backed/.env with:
+1. Define server/.env with:
 SECRET_KEY=_
 POSTGRES_USER=_
 POSTGRES_PASSWORD=_

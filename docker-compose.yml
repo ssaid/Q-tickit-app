@@ -12,9 +12,13 @@ services:
       - ./server/.env
     ports:
       - 8000:8000
-      - 1984:1984
+    environment:
+      WDB_SOCKET_SERVER: wdb
+      WDB_NO_BROWSER_AUTO_OPEN: "true"
+      WDB_WEB_SERVER: "localhost:1984"
     depends_on:
       - db
+      - wdb
 
   db:
     image: postgres:13-alpine
@@ -24,6 +28,13 @@ services:
       - ./server/.env
     ports:
       - 5432:5432
+  
+  wdb:
+    image: docker.io/kozea/wdb
+    ports:
+      - 1984:1984
+    # HACK https://github.com/Kozea/wdb/issues/136
+    init: true
 
 volumes:
     postgres_data:

@@ -2,8 +2,8 @@ const express = require('express');
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const passport = require('passport');
-require('./server/initializers/passport');
-require('./server/config/config.js');
+require('./src/initializers/passport');
+require('./src/config/config.js');
 
 // Set up the express app
 const app = express();
@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
 
 // Require our routes into the application.
-require('./server/routes')(app);
+require('./src/routes')(app);
 
 app.get('*', (req, res) => res.status(200).send({
   message: 'Welcome to the beginning of nothingness.',
